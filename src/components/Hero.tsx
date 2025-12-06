@@ -26,10 +26,11 @@ export default function Hero() {
       </motion.p>
 
       <a
-        href="#experience"
+        href="/my-portfolio/cv.pdf"
+        download="Ako's CV.pdf"
         className="mt-8 px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
       >
-        View My Work
+        Download CV
       </a>
     </section>
   );
