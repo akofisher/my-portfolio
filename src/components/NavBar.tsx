@@ -12,7 +12,17 @@ export default function Navbar() {
           Ako.dev
         </a>
 
-        <button className="md:hidden" onClick={() => setOpen(!open)}>
+        <button
+          onClick={() => setOpen(!open)}
+          className="md:hidden
+             w-12 h-12
+             flex items-center justify-center
+             text-2xl
+             rounded-lg
+             active:scale-95
+             transition"
+          aria-label="Open menu"
+        >
           ☰
         </button>
 
