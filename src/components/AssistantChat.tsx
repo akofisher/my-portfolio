@@ -34,7 +34,7 @@ export default function AssistantChat() {
     } catch (e) {
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", text: "გაუგებარი შეცდომა მოხდა." },
+        { role: "assistant", text: "სამწუხაროდ ასისტენტი ვერ გპასუხობთ" },
       ]);
     } finally {
       setLoading(false);
