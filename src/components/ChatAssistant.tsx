@@ -104,16 +104,14 @@ export default function ChatAssistant() {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end">
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50">
       {/* Toggle Button */}
-      <motion.button
+      <button
         onClick={() => setOpen(!open)}
         className="bg-blue-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-blue-700 transition sm:px-5 sm:py-2.5"
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
       >
         {open ? "Close Chat" : "Chat with Ako"}
-      </motion.button>
+      </button>
 
       {/* Chat Box */}
       <AnimatePresence>
@@ -122,7 +120,7 @@ export default function ChatAssistant() {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
-            className="w-[90vw] max-w-xs sm:w-80 h-[70vh] sm:h-[24rem] bg-white shadow-xl rounded-2xl mt-2 flex flex-col overflow-hidden border border-gray-200"
+            className="w-[90vw] max-w-xs sm:w-80 h-[70vh] sm:h-96 bg-white shadow-xl rounded-xl mt-2 flex flex-col overflow-hidden border border-gray-200"
           >
             {/* Messages */}
             <div className="flex-1 p-4 overflow-y-auto space-y-2 bg-gray-50">
@@ -131,33 +129,17 @@ export default function ChatAssistant() {
                   key={i}
                   initial={{ opacity: 0, y: 5 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className={`max-w-[80%] break-words p-3 relative ${
+                  className={`p-2 rounded-xl max-w-[80%] break-words ${
                     m.role === "user"
-                      ? "self-end bg-blue-600 text-white rounded-xl rounded-br-none"
-                      : "self-start bg-gray-200 text-gray-900 rounded-xl rounded-bl-none"
+                      ? "bg-blue-600 text-white self-end rounded-br-none"
+                      : "bg-gray-200 text-gray-900 self-start rounded-bl-none"
                   }`}
                 >
                   {m.text}
-
-                  {/* Optional small triangle pointer like Messenger */}
-                  <span
-                    className={`absolute bottom-0 w-3 h-3 transform rotate-45 ${
-                      m.role === "user"
-                        ? "right-[-6px] bg-blue-600"
-                        : "left-[-6px] bg-gray-200"
-                    }`}
-                  ></span>
                 </motion.div>
               ))}
-
               {loading && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="self-start text-gray-400 italic"
-                >
-                  Ako is typing...
-                </motion.div>
+                <div className="italic text-gray-400">Ako is typing...</div>
               )}
               <div ref={messagesEndRef} />
             </div>
@@ -165,15 +147,15 @@ export default function ChatAssistant() {
             {/* Input */}
             <div className="flex border-t p-2 gap-2 bg-white">
               <input
+                className="flex-1 border rounded-lg px-3 py-2 outline-none text-sm sm:text-base focus:ring-2 focus:ring-blue-600"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSend()}
                 placeholder="Type your message..."
-                className="flex-1 border rounded-xl px-3 py-2 text-sm sm:text-base outline-none focus:ring-2 focus:ring-blue-600"
               />
               <button
                 onClick={handleSend}
-                className="bg-blue-600 text-white px-3 py-2 rounded-xl hover:bg-blue-700 transition text-sm sm:text-base"
+                className="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition text-sm sm:text-base"
               >
                 Send
               </button>
