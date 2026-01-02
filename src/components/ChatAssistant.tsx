@@ -58,7 +58,6 @@ export default function ChatAssistant() {
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Scroll to bottom whenever messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, open]);
@@ -104,7 +103,7 @@ export default function ChatAssistant() {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50">
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end">
       {/* Toggle Button */}
       <button
         onClick={() => setOpen(!open)}
@@ -122,24 +121,37 @@ export default function ChatAssistant() {
             exit={{ opacity: 0, y: 50 }}
             className="w-[90vw] max-w-xs sm:w-80 h-[70vh] sm:h-96 bg-white shadow-xl rounded-xl mt-2 flex flex-col overflow-hidden border border-gray-200"
           >
+            {/* Header */}
+            <div className="flex justify-between items-center bg-blue-600 text-white p-3 font-semibold">
+              Chat with Ako's Assistant
+              <button
+                onClick={() => setOpen(false)}
+                className="text-white font-bold hover:opacity-80 transition"
+              >
+                ✕
+              </button>
+            </div>
+
             {/* Messages */}
-            <div className="flex-1 p-4 overflow-y-auto space-y-2 bg-gray-50">
+            <div className="flex-1 p-3 overflow-y-auto space-y-2 bg-gray-50 flex flex-col">
               {messages.map((m, i) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, y: 5 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className={`p-2 rounded-xl max-w-[80%] break-words ${
+                  className={`max-w-[80%] break-words p-3 rounded-xl text-left ${
                     m.role === "user"
-                      ? "bg-blue-600 text-white self-end rounded-br-none"
-                      : "bg-gray-200 text-gray-900 self-start rounded-bl-none"
+                      ? "bg-blue-600 text-white self-end rounded-tr-none"
+                      : "bg-gray-200 text-gray-900 self-start rounded-tl-none"
                   }`}
                 >
                   {m.text}
                 </motion.div>
               ))}
               {loading && (
-                <div className="italic text-gray-400">Ako is typing...</div>
+                <div className="italic text-gray-500 text-sm">
+                  Assistant is typing...
+                </div>
               )}
               <div ref={messagesEndRef} />
             </div>
