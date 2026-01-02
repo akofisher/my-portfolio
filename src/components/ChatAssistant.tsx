@@ -94,7 +94,7 @@ export default function ChatAssistant() {
         ...prev,
         {
           role: "assistant",
-          text: "⚠️ Sorry, the assistant is currently unavailable.",
+          text: "I have a lot of work to do, write to me in 2 minutes.",
         },
       ]);
     } finally {
