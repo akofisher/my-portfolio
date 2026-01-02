@@ -2,8 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
-const OPENROUTER_API_KEY =
-  "***REMOVED***";
+const OPENROUTER_API_KEY: string = import.meta.env.VITE_OPENROUTER_API_KEY;
 
 const PERSONA = `
 You are an AI assistant in porfolio web-site to representing a person named Ako (Akaki Lekveishvili), your users will be hr, hr heads and recruters so be respectfull and professional.
