@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import AssistantChat from "./AssistantChat";
+import ChatAssistant from "./ChatAssistant";
 
 export default function Hero() {
   return (
@@ -33,9 +33,7 @@ export default function Hero() {
       >
         Download CV
       </a>
-
-      {/* Assistant Chat Widget */}
-      <AssistantChat />
+      <ChatAssistant />
     </section>
   );
 }
