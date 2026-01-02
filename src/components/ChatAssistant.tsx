@@ -1,11 +1,14 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
-const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
-const OPENROUTER_API_KEY: string = import.meta.env.VITE_OPENROUTER_API_KEY;
+type Message = {
+  role: "user" | "assistant";
+  text: string;
+};
 
 const PERSONA = `
-You are an AI assistant in porfolio web-site to representing a person named Ako (Akaki Lekveishvili), your users will be hr, hr heads and recruters so be respectfull and professional.
+You are an AI assistant on a portfolio website representing Ako (Akaki Lekveishvili). 
+Your audience is HRs, recruiters, and hiring managers, so be professional and respectful.
 
 Basic info about Ako:
 - Profession: Strong Middle Frontend Developer (Web & Mobile)
@@ -47,10 +50,6 @@ Behavior Rules:
 - Never invent experience or projects
 - Can explain technical topics at a developer level
 `;
-type Message = {
-  role: "user" | "assistant";
-  text: string;
-};
 
 export default function ChatAssistant() {
   const [open, setOpen] = useState(false);
@@ -59,6 +58,7 @@ export default function ChatAssistant() {
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // Scroll to bottom whenever messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, open]);
@@ -72,31 +72,21 @@ export default function ChatAssistant() {
     setLoading(true);
 
     try {
-      const res = await fetch(OPENROUTER_URL, {
+      const res = await fetch("https://chatbot-ypfo.onrender.com/chat", {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${OPENROUTER_API_KEY}`,
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "meta-llama/llama-3.2-3b-instruct:free",
           messages: [
             { role: "system", content: PERSONA },
-            ...messages.map((m) => ({
-              role: m.role,
-              content: m.text,
-            })),
+            ...messages.map((m) => ({ role: m.role, content: m.text })),
             { role: "user", content: input },
           ],
-          temperature: 0.6,
-          max_tokens: 200,
         }),
       });
 
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
       const data = await res.json();
-      const reply = data.choices[0].message.content;
+      const reply = data.choices[0]?.message?.content || "No response";
 
       setMessages((prev) => [...prev, { role: "assistant", text: reply }]);
     } catch (err) {
@@ -105,7 +95,7 @@ export default function ChatAssistant() {
         ...prev,
         {
           role: "assistant",
-          text: "I have a lot of work to do, write to me in 2 minutes, Sorry...",
+          text: "⚠️ Sorry, the assistant is currently unavailable.",
         },
       ]);
     } finally {
@@ -114,43 +104,60 @@ export default function ChatAssistant() {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50">
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end">
       {/* Toggle Button */}
-      <button
+      <motion.button
         onClick={() => setOpen(!open)}
         className="bg-blue-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-blue-700 transition sm:px-5 sm:py-2.5"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
       >
         {open ? "Close Chat" : "Chat with Ako"}
-      </button>
+      </motion.button>
 
       {/* Chat Box */}
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: 50, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 50, scale: 0.95 }}
-            transition={{ duration: 0.3 }}
-            className="w-[90vw] max-w-xs sm:w-80 h-[70vh] sm:h-96 bg-white shadow-xl rounded-xl mt-2 flex flex-col overflow-hidden border border-gray-200"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            className="w-[90vw] max-w-xs sm:w-80 h-[70vh] sm:h-[24rem] bg-white shadow-xl rounded-2xl mt-2 flex flex-col overflow-hidden border border-gray-200"
           >
             {/* Messages */}
-            <div className="flex-1 p-3 overflow-y-auto flex flex-col gap-2">
+            <div className="flex-1 p-4 overflow-y-auto space-y-2 bg-gray-50">
               {messages.map((m, i) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, y: 5 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className={`max-w-[80%] text-start break-words px-3 py-2 rounded-xl shadow-sm ${
+                  className={`max-w-[80%] break-words p-3 relative ${
                     m.role === "user"
-                      ? "bg-blue-600 text-white self-end rounded-br-none"
-                      : "bg-gray-100 text-gray-800 self-start rounded-bl-none"
+                      ? "self-end bg-blue-600 text-white rounded-xl rounded-br-none"
+                      : "self-start bg-gray-200 text-gray-900 rounded-xl rounded-bl-none"
                   }`}
                 >
                   {m.text}
+
+                  {/* Optional small triangle pointer like Messenger */}
+                  <span
+                    className={`absolute bottom-0 w-3 h-3 transform rotate-45 ${
+                      m.role === "user"
+                        ? "right-[-6px] bg-blue-600"
+                        : "left-[-6px] bg-gray-200"
+                    }`}
+                  ></span>
                 </motion.div>
               ))}
+
               {loading && (
-                <div className="italic text-gray-400 self-start">Typing...</div>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="self-start text-gray-400 italic"
+                >
+                  Ako is typing...
+                </motion.div>
               )}
               <div ref={messagesEndRef} />
             </div>
@@ -158,11 +165,11 @@ export default function ChatAssistant() {
             {/* Input */}
             <div className="flex border-t p-2 gap-2 bg-white">
               <input
-                className="flex-1 border rounded-xl px-3 py-2 outline-none text-sm sm:text-base focus:ring-2 focus:ring-blue-600"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSend()}
                 placeholder="Type your message..."
+                className="flex-1 border rounded-xl px-3 py-2 text-sm sm:text-base outline-none focus:ring-2 focus:ring-blue-600"
               />
               <button
                 onClick={handleSend}
