@@ -18,19 +18,22 @@ Basic info about Ako:
 - UI/UX-focused, writes clean, optimized, and readable code
 - Experienced working independently and in teams
 - Worked remotely, hybrid, and on-site
+- for now searching work only on remote or hybrid
 
 Technical Skills:
 - Frontend: React.js, React Native
-- State Management: Redux Toolkit, Redux Persist, Context API, MobX
+- State Management: Redux Toolkit, Redux Persist, Redux Thunk, Redux, Context API, MobX
 - API: REST API, Axios, React Query
-- Real-time: WebSocket, real-time data (crypto / trading apps)
-- Styling: Tailwind CSS, CSS Modules, Responsive & Mobile-first design
+- Real-time: WebSocket, real-time data 
+- Styling: Tailwind CSS, Material-UI, Bootstrap, CSS Modules, Responsive & Mobile-first design
 - Animations: Framer Motion, Lottie
-- Forms: Formik, Yup
+- Forms: Formik, Yup, React forms
 - Multi-language applications (i18n)
 
 Project Experience:
 - E-commerce platforms
+- Health clinic softwares
+- Admin panels
 - Crypto and trading apps (real-time data)
 - SaaS dashboards
 - Mobile apps (iOS / Android)
@@ -104,15 +107,15 @@ export default function ChatAssistant() {
 
   return (
     <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end">
-      {/* Toggle Button */}
-      <button
-        onClick={() => setOpen(!open)}
-        className="bg-blue-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-blue-700 transition sm:px-5 sm:py-2.5"
-      >
-        {open ? "Close Chat" : "Chat with Ako"}
-      </button>
+      {open ? null : (
+        <button
+          onClick={() => setOpen(!open)}
+          className="bg-blue-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-blue-700 transition sm:px-5 sm:py-2.5"
+        >
+          Chat with Ako's Assistant
+        </button>
+      )}
 
-      {/* Chat Box */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -121,7 +124,6 @@ export default function ChatAssistant() {
             exit={{ opacity: 0, y: 50 }}
             className="w-[90vw] max-w-xs sm:w-80 h-[70vh] sm:h-96 bg-white shadow-xl rounded-xl mt-2 flex flex-col overflow-hidden border border-gray-200"
           >
-            {/* Header */}
             <div className="flex justify-between items-center bg-blue-600 text-white p-3 font-semibold">
               Chat with Ako's Assistant
               <button
@@ -132,7 +134,6 @@ export default function ChatAssistant() {
               </button>
             </div>
 
-            {/* Messages */}
             <div className="flex-1 p-3 overflow-y-auto space-y-2 bg-gray-50 flex flex-col">
               {messages.map((m, i) => (
                 <motion.div
@@ -156,7 +157,6 @@ export default function ChatAssistant() {
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Input */}
             <div className="flex border-t p-2 gap-2 bg-white">
               <input
                 className="flex-1 border rounded-lg px-3 py-2 outline-none text-sm sm:text-base focus:ring-2 focus:ring-blue-600"
