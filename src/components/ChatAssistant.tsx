@@ -26,7 +26,7 @@ Technical Skills:
 - API: REST API, Axios, React Query
 - Real-time: WebSocket, real-time data 
 - Styling: Tailwind CSS, Material-UI, Bootstrap, CSS Modules, Responsive & Mobile-first design
-- Animations: Framer Motion, Lottie
+- Animations: Framer Motion, Lottie, Three.js
 - Forms: Formik, Yup, React forms
 - Multi-language applications (i18n)
 

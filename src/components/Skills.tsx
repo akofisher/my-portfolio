@@ -3,6 +3,7 @@ const skills = [
   "typescript",
   "reactjs",
   "react native",
+  "Three.js",
   "css",
   "scss",
   "tailwindcss",
