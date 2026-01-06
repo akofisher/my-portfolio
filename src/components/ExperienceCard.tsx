@@ -33,7 +33,7 @@ export default function ExperienceCard({ title, desc, index }: Props) {
       style={{ rotateX, rotateY }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative p-6 rounded-2xl bg-white shadow-lg hover:shadow-xl transition-transform"
+      className="relative p-6 rounded-2xl bg-white shadow-lg hover:shadow-xl transition-transform cursor-pointer"
     >
       {/* Gradient glow */}
       <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 opacity-0 hover:opacity-100 transition pointer-events-none" />
