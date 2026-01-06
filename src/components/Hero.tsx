@@ -1,12 +1,16 @@
 import { motion } from "framer-motion";
 import ChatAssistant from "./ChatAssistant";
+import HeroBackground from "./HeroBackground";
 
 export default function Hero() {
   return (
     <section
       id="home"
-      className="min-h-screen flex flex-col justify-center items-center text-center px-6"
+      className="relative min-h-screen flex flex-col justify-center items-center text-center px-6 overflow-hidden"
     >
+      {/* 3D Background */}
+      <HeroBackground />
+
       <motion.h1
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -33,6 +37,7 @@ export default function Hero() {
       >
         Download CV
       </a>
+
       <ChatAssistant />
     </section>
   );

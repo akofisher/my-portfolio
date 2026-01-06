@@ -1,3 +1,5 @@
+import ExperienceCard from "./ExperienceCard";
+
 const experience = [
   {
     title: "Calendo Web Application",
@@ -33,18 +35,19 @@ const experience = [
 
 export default function Experience() {
   return (
-    <section id="experience" className="max-w-6xl mx-auto p-6 py-20">
-      <h2 className="text-3xl font-bold mb-8">Experience</h2>
+    <section id="experience" className="max-w-6xl mx-auto px-6 py-24">
+      <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">
+        Experience
+      </h2>
 
-      <div className="grid md:grid-cols-2 gap-8">
-        {experience.map((p) => (
-          <div
-            key={p.title}
-            className="p-6 bg-white cursor-pointer  shadow rounded-2xl hover:shadow-md transition"
-          >
-            <h3 className="text-xl font-semibold text-blue-600">{p.title}</h3>
-            <p className="mt-2 opacity-80">{p.desc}</p>
-          </div>
+      <div className="grid md:grid-cols-2 gap-8 perspective-[1200px]">
+        {experience.map((item, i) => (
+          <ExperienceCard
+            key={item.title}
+            title={item.title}
+            desc={item.desc}
+            index={i}
+          />
         ))}
       </div>
     </section>
