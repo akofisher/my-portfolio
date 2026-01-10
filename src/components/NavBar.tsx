@@ -8,7 +8,13 @@ export default function Navbar() {
   return (
     <nav className="fixed top-0 w-full bg-white/70 backdrop-blur-md shadow z-50">
       <div className="max-w-6xl mx-auto flex justify-between items-center p-4">
-        <a href="#home" className="text-2xl font-bold text-blue-600">
+        <a
+          onClick={() => {
+            window.location.href = "#home";
+            window.location.reload();
+          }}
+          className="text-2xl font-bold text-blue-600"
+        >
           Ako.dev
         </a>
 
