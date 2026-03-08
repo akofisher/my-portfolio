@@ -26,7 +26,7 @@ export default function Hero() {
         transition={{ delay: 0.4 }}
         className="mt-4 text-lg opacity-80 max-w-xl"
       >
-        ReactJS & React Native Developer — crafting high-performance apps with
+        Full Stack | MERN Stack Developer — crafting high-performance apps with
         clean architecture.
       </motion.p>
 

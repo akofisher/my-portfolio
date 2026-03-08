@@ -21,6 +21,7 @@ const skills = [
   "websocket",
   "code splitting",
   "formik",
+  "yup",
   "git",
   "github",
   "jira",
@@ -29,6 +30,16 @@ const skills = [
   "xcode",
   "npm",
   "yarn",
+  "nodejs",
+  "expressjs",
+  "mongoose",
+  "mongodb",
+  "python",
+  "VM",
+  "Clouds",
+  "Domains",
+  "DNS",
+  "Hosting",
 ];
 
 export default function Skills() {

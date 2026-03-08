@@ -27,6 +27,14 @@ export default function About() {
         With a strong problem-solving mindset and a focus on product quality, I
         aim to deliver high-performance, user-friendly, and scalable
         applications that bring real value to teams and users.
+        <br />
+        <br />
+        For last months I was learning and working on full stack project, with
+        technologies: ReactJS-NextJS for Admin Panel, React Native for user side
+        mobile app, NodeJS, ExpressJS, Mongoose, MongoDB for back end, Used
+        languages Javascript & Typescript. For Now I can say that Im strong
+        junior full stack software engineer, senior Front end engineer and
+        junior back end engineer. So Im open for new opportunities.
       </p>
     </section>
   );
