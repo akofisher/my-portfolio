@@ -1,11 +1,14 @@
-export default function Contact() {
+import { copy, type Language } from "../i18n";
+
+export default function Contact({ language }: { language: Language }) {
+  const t = copy[language];
   return (
     <section id="contact" className="bg-gray-100 py-20 px-6">
       <div className="max-w-4xl mx-auto text-center">
-        <h2 className="text-3xl font-bold">Contact Me</h2>
+        <h2 className="text-3xl font-bold">{t.contactTitle}</h2>
 
         <p className="mt-4 opacity-80">
-          Interested in working together? Let’s talk.
+          {t.contactText}
         </p>
 
         <div className="mt-8 flex flex-col items-center gap-4">

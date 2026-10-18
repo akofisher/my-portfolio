@@ -42,11 +42,14 @@ const skills = [
   "Hosting",
 ];
 
-export default function Skills() {
+import { copy, type Language } from "../i18n";
+
+export default function Skills({ language }: { language: Language }) {
+  const t = copy[language];
   return (
     <section id="skills" className="bg-gray-50 py-20 px-6">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl font-bold mb-10">Skills</h2>
+        <h2 className="text-3xl font-bold mb-10">{t.skillsTitle}</h2>
 
         <div className="flex flex-wrap gap-4">
           {skills.map((s) => (

@@ -1,5 +1,5 @@
 import { Float } from "@react-three/drei";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, type ThreeEvent } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";
 
@@ -28,7 +28,7 @@ function FloatingSphere() {
     }
   });
 
-  const onPointerDown = (e: any) => {
+  const onPointerDown = (e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation();
     isDragging.current = true;
     last.current = { x: e.clientX, y: e.clientY };
@@ -40,7 +40,7 @@ function FloatingSphere() {
     document.body.style.cursor = "default";
   };
 
-  const onPointerMove = (e: any) => {
+  const onPointerMove = (e: ThreeEvent<PointerEvent>) => {
     if (!isDragging.current || !mesh.current) return;
 
     const dx = e.clientX - last.current.x;

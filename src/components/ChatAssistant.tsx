@@ -1,60 +1,24 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { copy, type Language } from "../i18n";
 
 type Message = {
   role: "user" | "assistant";
   text: string;
 };
 
-const PERSONA = `
-You are an AI assistant on a portfolio website representing Ako (Akaki Lekveishvili). 
-Your audience is HRs, recruiters, and hiring managers, so be professional and respectful.
+function answer(question: string, language: Language) {
+  const q = question.toLowerCase();
+  const ka = language === "ka";
+  if (/contact|email|phone|კონტაქტ|იმეილ|ტელეფონ/.test(q)) return ka ? "აკოსთან დაკავშირება შეგიძლიათ ელფოსტით: akolekveishvili@gmail.com ან ტელეფონით: +995 557 404 359." : "You can reach Ako at akolekveishvili@gmail.com or +995 557 404 359.";
+  if (/available|remote|hybrid|work|availability|დასაქმ|დისტანც|ჰიბრიდ/.test(q)) return ka ? "აკო ღიაა დისტანციური და ჰიბრიდული შესაძლებლობებისთვის." : "Ako is available for remote and hybrid opportunities.";
+  if (/experience|years|project|გამოცდილ|პროექტ/.test(q)) return ka ? "აკოს აქვს 5+ წლიანი გამოცდილება. მუშაობდა Gifta.ge-ზე, Calendo-ზე, Altera-ზე, IdeoDigital-ზე, NLYC-სა და Mego.ge-ზე; გამოცდილება მოიცავს e-commerce, ჯავშნის სისტემებს, დეშბორდებსა და მობილურ აპებს." : "Ako has 5+ years of experience, including Gifta.ge, Calendo, Altera, IdeoDigital, NLYC, and Mego.ge. His work includes e-commerce, booking systems, dashboards, and mobile apps.";
+  if (/skill|react|native|typescript|stack|უნარ|ტექნოლოგ|რეაქტ/.test(q)) return ka ? "ძირითადი ტექნოლოგიებია React Native, React, TypeScript, JavaScript და Next.js. ასევე მუშაობს Node.js, Express, MongoDB, Redux Toolkit, RTK Query, Tailwind CSS და WebSocket-ით." : "Ako’s core stack is React Native, React, TypeScript, JavaScript, and Next.js. He also works with Node.js, Express, MongoDB, Redux Toolkit, RTK Query, Tailwind CSS, and WebSocket.";
+  return ka ? "შემიძლია გიპასუხოთ აკოს გამოცდილების, ტექნიკური უნარების, პროექტების, ხელმისაწვდომობისა და საკონტაქტო ინფორმაციის შესახებ." : "I can help with Ako’s experience, technical skills, projects, availability, or contact details.";
+}
 
-Basic info about Ako:
-- Profession: Strong Middle Frontend Developer (Web & Mobile)
-- Experience: 4+ years
-- Specialization: React.js, React Native
-- Primary languages: TypeScript and JavaScript
-- UI/UX-focused, writes clean, optimized, and readable code
-- Experienced working independently and in teams
-- Worked remotely, hybrid, and on-site
-- for now searching work only on remote or hybrid
-
-Technical Skills:
-- Frontend: React.js, React Native
-- State Management: Redux Toolkit, Redux Persist, Redux Thunk, Redux, Context API, MobX
-- API: REST API, Axios, React Query
-- Real-time: WebSocket, real-time data 
-- Styling: Tailwind CSS, Material-UI, Bootstrap, CSS Modules, Responsive & Mobile-first design
-- Animations: Framer Motion, Lottie, Three.js
-- Forms: Formik, Yup, React forms
-- Multi-language applications (i18n)
-
-Project Experience:
-- E-commerce platforms
-- Health clinic softwares
-- Admin panels
-- Crypto and trading apps (real-time data)
-- SaaS dashboards
-- Mobile apps (iOS / Android)
-- Portfolio and landing pages
-
-Work Style:
-- Focused on quality, performance, and scalability
-- Pays attention to UX details
-- Writes reusable components
-- Always follows modern best practices
-
-Behavior Rules:
-- Always respond in English
-- Act as Ako's personal assistant
-- Be professional, friendly, and clear
-- If a question exceeds your knowledge, say you don't know
-- Never invent experience or projects
-- Can explain technical topics at a developer level
-`;
-
-export default function ChatAssistant() {
+export default function ChatAssistant({ language }: { language: Language }) {
+  const t = copy[language];
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -73,36 +37,10 @@ export default function ChatAssistant() {
     setInput("");
     setLoading(true);
 
-    try {
-      const res = await fetch("https://chatbot-ypfo.onrender.com/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          messages: [
-            { role: "system", content: PERSONA },
-            ...messages.map((m) => ({ role: m.role, content: m.text })),
-            { role: "user", content: input },
-          ],
-        }),
-      });
-
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      const reply = data.choices[0]?.message?.content || "No response";
-
-      setMessages((prev) => [...prev, { role: "assistant", text: reply }]);
-    } catch (err) {
-      console.error(err);
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          text: "I have a lot of work to do, write to me in 2 minutes.",
-        },
-      ]);
-    } finally {
+    window.setTimeout(() => {
+      setMessages((prev) => [...prev, { role: "assistant", text: answer(input, language) }]);
       setLoading(false);
-    }
+    }, 250);
   };
 
   return (
@@ -112,7 +50,7 @@ export default function ChatAssistant() {
           onClick={() => setOpen(!open)}
           className="bg-blue-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-blue-700 transition sm:px-5 sm:py-2.5"
         >
-          Chat with Ako's Assistant
+          {t.chatbot}
         </button>
       )}
 
@@ -125,7 +63,7 @@ export default function ChatAssistant() {
             className="w-[90vw] max-w-xs sm:w-80 h-[70vh] sm:h-96 bg-white shadow-xl rounded-xl mt-2 flex flex-col overflow-hidden border border-gray-200"
           >
             <div className="flex justify-between items-center bg-blue-600 text-white p-3 font-semibold">
-              Chat with Ako's Assistant
+              {t.chatbot}
               <button
                 onClick={() => setOpen(false)}
                 className="text-white font-bold hover:opacity-80 transition"
@@ -163,13 +101,13 @@ export default function ChatAssistant() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                placeholder="Type your message..."
+                placeholder={t.typeMessage}
               />
               <button
                 onClick={handleSend}
                 className="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition text-sm sm:text-base"
               >
-                Send
+                {t.send}
               </button>
             </div>
           </motion.div>

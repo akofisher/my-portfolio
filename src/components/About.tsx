@@ -1,40 +1,13 @@
-export default function About() {
+import { copy, type Language } from "../i18n";
+
+export default function About({ language }: { language: Language }) {
+  const t = copy[language];
   return (
     <section id="about" className="max-w-6xl mx-auto p-6 py-20">
-      <h2 className="text-3xl font-bold mb-6">About Me</h2>
+      <h2 className="text-3xl font-bold mb-6">{t.aboutTitle}</h2>
 
       <p className="leading-relaxed opacity-80 max-w-3xl">
-        Hi, I’m Akaki Lekveishvili — a Front-end Developer specializing in React
-        Native and ReactJS with over four years of experience building
-        production-ready web and mobile applications. I focus on creating clean,
-        scalable architectures using modern best practices, reusable components,
-        optimized performance, and smooth user experiences.
-        <br />
-        <br />
-        I’ve built complete booking systems, e-commerce platforms, clinic
-        software, and admin dashboards — taking projects from zero to production
-        while ensuring strong architecture, reliable API integrations, and
-        maintainable codebases.
-        <br />
-        <br />
-        My expertise includes JavaScript, TypeScript, ReactJS, React Native,
-        Redux Toolkit, RTK Query, TailwindCSS, Formik, Axios, WebSocket, Git,
-        and modern frontend tooling. I am comfortable owning projects
-        end-to-end, improving existing applications, or developing new ones from
-        scratch.
-        <br />
-        <br />
-        With a strong problem-solving mindset and a focus on product quality, I
-        aim to deliver high-performance, user-friendly, and scalable
-        applications that bring real value to teams and users.
-        <br />
-        <br />
-        For last months I was learning and working on full stack project, with
-        technologies: ReactJS-NextJS for Admin Panel, React Native for user side
-        mobile app, NodeJS, ExpressJS, Mongoose, MongoDB for back end, Used
-        languages Javascript & Typescript. For Now I can say that Im strong
-        junior full stack software engineer, senior Front end engineer and
-        junior back end engineer. So Im open for new opportunities.
+        {t.about}
       </p>
     </section>
   );

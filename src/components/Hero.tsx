@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
 import ChatAssistant from "./ChatAssistant";
 import HeroBackground from "./HeroBackground";
+import { copy, type Language } from "../i18n";
 
-export default function Hero() {
+export default function Hero({ language }: { language: Language }) {
+  const t = copy[language];
   return (
     <section
       id="home"
@@ -17,7 +19,7 @@ export default function Hero() {
         transition={{ duration: 0.6 }}
         className="text-4xl md:text-6xl font-bold"
       >
-        Hi, I'm <span className="text-blue-600">Ako</span>
+        {t.heroTitle}
       </motion.h1>
 
       <motion.p
@@ -26,19 +28,15 @@ export default function Hero() {
         transition={{ delay: 0.4 }}
         className="mt-4 text-lg opacity-80 max-w-xl"
       >
-        Full Stack | MERN Stack Developer — crafting high-performance apps with
-        clean architecture.
+        {t.heroText}
       </motion.p>
 
-      <a
-        href="/my-portfolio/cv.pdf"
-        download="Ako's CV.pdf"
-        className="mt-8 px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
-      >
-        Download CV
-      </a>
+      <div className="mt-8 flex flex-wrap justify-center gap-3">
+        <a href={`${import.meta.env.BASE_URL}Akaki_Lekveishvili_2026_EN.pdf`} download className="px-5 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition">{t.cvEn}</a>
+        <a href={`${import.meta.env.BASE_URL}Akaki_Lekveishvili_2026_KA.pdf`} download className="px-5 py-3 border border-blue-600 text-blue-700 rounded-full hover:bg-blue-50 transition">{t.cvKa}</a>
+      </div>
 
-      <ChatAssistant />
+      <ChatAssistant language={language} />
     </section>
   );
 }
