@@ -7,15 +7,13 @@ type Message = {
   text: string;
 };
 
-function answer(question: string, language: Language) {
-  const q = question.toLowerCase();
-  const ka = language === "ka";
-  if (/contact|email|phone|კონტაქტ|იმეილ|ტელეფონ/.test(q)) return ka ? "აკოსთან დაკავშირება შეგიძლიათ ელფოსტით: akolekveishvili@gmail.com ან ტელეფონით: +995 557 404 359." : "You can reach Ako at akolekveishvili@gmail.com or +995 557 404 359.";
-  if (/available|remote|hybrid|work|availability|დასაქმ|დისტანც|ჰიბრიდ/.test(q)) return ka ? "აკო ღიაა დისტანციური და ჰიბრიდული შესაძლებლობებისთვის." : "Ako is available for remote and hybrid opportunities.";
-  if (/experience|years|project|გამოცდილ|პროექტ/.test(q)) return ka ? "აკოს აქვს 5+ წლიანი გამოცდილება. მუშაობდა Gifta.ge-ზე, Calendo-ზე, Altera-ზე, IdeoDigital-ზე, NLYC-სა და Mego.ge-ზე; გამოცდილება მოიცავს e-commerce, ჯავშნის სისტემებს, დეშბორდებსა და მობილურ აპებს." : "Ako has 5+ years of experience, including Gifta.ge, Calendo, Altera, IdeoDigital, NLYC, and Mego.ge. His work includes e-commerce, booking systems, dashboards, and mobile apps.";
-  if (/skill|react|native|typescript|stack|უნარ|ტექნოლოგ|რეაქტ/.test(q)) return ka ? "ძირითადი ტექნოლოგიებია React Native, React, TypeScript, JavaScript და Next.js. ასევე მუშაობს Node.js, Express, MongoDB, Redux Toolkit, RTK Query, Tailwind CSS და WebSocket-ით." : "Ako’s core stack is React Native, React, TypeScript, JavaScript, and Next.js. He also works with Node.js, Express, MongoDB, Redux Toolkit, RTK Query, Tailwind CSS, and WebSocket.";
-  return ka ? "შემიძლია გიპასუხოთ აკოს გამოცდილების, ტექნიკური უნარების, პროექტების, ხელმისაწვდომობისა და საკონტაქტო ინფორმაციის შესახებ." : "I can help with Ako’s experience, technical skills, projects, availability, or contact details.";
-}
+const PERSONA = `You are an AI assistant on the portfolio website of Akaki Lekveishvili (Ako).
+Be professional, friendly, and concise. Answer in the language used by the visitor.
+Only use these facts; never invent experience, employers, or personal details.
+
+Akaki is a Senior React Native / React Developer and full-stack JavaScript developer with 5+ years of experience. He builds web and mobile applications with React Native, React, TypeScript, JavaScript, Next.js, Node.js, Express, MongoDB, Mongoose, REST APIs, WebSocket, Redux Toolkit, RTK Query, Tailwind CSS, Material UI, Formik, Yup, Git, Google Cloud VM, Android Studio, and Xcode.
+
+His work includes Gifta.ge, freelance full-stack development, Calendo, Altera, IdeoDigital, NLYC, and Mego.ge. He has experience in e-commerce, booking and scheduling, clinic software, dashboards, real-time interfaces, and iOS/Android apps. He is open to remote and hybrid opportunities. Contact: akolekveishvili@gmail.com, +995 557 404 359.`;
 
 export default function ChatAssistant({ language }: { language: Language }) {
   const t = copy[language];
@@ -37,10 +35,32 @@ export default function ChatAssistant({ language }: { language: Language }) {
     setInput("");
     setLoading(true);
 
-    window.setTimeout(() => {
-      setMessages((prev) => [...prev, { role: "assistant", text: answer(input, language) }]);
+    try {
+      const res = await fetch("https://chatbot-ypfo.onrender.com/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: [
+            { role: "system", content: PERSONA },
+            ...messages.map((message) => ({ role: message.role, content: message.text })),
+            { role: "user", content: input },
+          ],
+        }),
+      });
+
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      const reply = data.choices?.[0]?.message?.content || "No response";
+      setMessages((prev) => [...prev, { role: "assistant", text: reply }]);
+    } catch (error) {
+      console.error(error);
+      setMessages((prev) => [...prev, {
+        role: "assistant",
+        text: language === "ka" ? "ასისტენტი დროებით მიუწვდომელია. გთხოვთ, სცადოთ მოგვიანებით ან დაუკავშირდეთ აკოს ელფოსტით." : "The assistant is temporarily unavailable. Please try again later or contact Ako by email.",
+      }]);
+    } finally {
       setLoading(false);
-    }, 250);
+    }
   };
 
   return (
