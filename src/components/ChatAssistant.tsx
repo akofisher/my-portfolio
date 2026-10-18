@@ -7,13 +7,85 @@ type Message = {
   text: string;
 };
 
-const PERSONA = `You are an AI assistant on the portfolio website of Akaki Lekveishvili (Ako).
-Be professional, friendly, and concise. Answer in the language used by the visitor.
-Only use these facts; never invent experience, employers, or personal details.
+type KnowledgeTopic = {
+  terms: string[];
+  en: string;
+  ka: string;
+};
 
-Akaki is a Senior React Native / React Developer and full-stack JavaScript developer with 5+ years of experience. He builds web and mobile applications with React Native, React, TypeScript, JavaScript, Next.js, Node.js, Express, MongoDB, Mongoose, REST APIs, WebSocket, Redux Toolkit, RTK Query, Tailwind CSS, Material UI, Formik, Yup, Git, Google Cloud VM, Android Studio, and Xcode.
+const KNOWLEDGE: KnowledgeTopic[] = [
+  {
+    terms: ["experience", "year", "background", "career", "senior", "mid", "გამოცდილ", "წელი", "კარიერ"],
+    en: "Ako has 5+ years of professional experience delivering production web and mobile applications. His roles include Founder & Full-Stack Developer at Gifta.ge, freelance full-stack work, and engineering roles at Calendo, Altera, IdeoDigital, NLYC, and Mego.ge.",
+    ka: "აკოს აქვს 5+ წლიანი პროფესიული გამოცდილება რეალურ გარემოში გამოყენებული ვებ და მობილური აპლიკაციების შექმნაში. მუშაობდა Gifta.ge-ზე, ფრილანსზე, Calendo-ში, Altera-ში, IdeoDigital-ში, NLYC-სა და Mego.ge-ში.",
+  },
+  {
+    terms: ["skill", "stack", "technology", "react", "react native", "typescript", "javascript", "უნარ", "ტექნოლოგ", "რეაქტ"],
+    en: "His core stack is React Native, React, TypeScript, JavaScript, and Next.js. He also works with Redux Toolkit, RTK Query, REST APIs, WebSocket, Node.js, Express, MongoDB, Mongoose, Tailwind CSS, Material UI, Formik, Yup, Git, Android Studio, and Xcode.",
+    ka: "აკოს ძირითადი ტექნოლოგიებია React Native, React, TypeScript, JavaScript და Next.js. ასევე მუშაობს Redux Toolkit-ით, RTK Query-თი, REST API-ებით, WebSocket-ით, Node.js-ით, Express-ით, MongoDB-ით, Tailwind CSS-ით, Android Studio-თი და Xcode-ით.",
+  },
+  {
+    terms: ["project", "portfolio", "built", "product", "gifta", "calendo", "altera", "project", "პროექტ", "გააკეთ", "შექმნ"],
+    en: "Ako has built e-commerce platforms, booking and scheduling systems, clinic-management software, dashboards, real-time interfaces, and iOS/Android apps. At Gifta.ge, he owns a web and mobile gifting platform built with Next.js, React Native, Node.js, Express, and MongoDB.",
+    ka: "აკოს შექმნილი აქვს ელექტრონული კომერციის პლატფორმები, ჯავშნისა და განრიგის სისტემები, კლინიკების მართვის პროგრამები, დეშბორდები, რეალურ დროში მონაცემების ინტერფეისები და iOS/Android აპლიკაციები. Gifta.ge-ზე ის ქმნის ვებ და მობილურ პლატფორმას Next.js, React Native, Node.js, Express და MongoDB-ით.",
+  },
+  {
+    terms: ["backend", "full stack", "node", "express", "database", "mongodb", "api", "ბექენდ", "სერვერ", "მონაცემ"],
+    en: "Alongside frontend work, Ako develops full-stack features with Node.js, Express, MongoDB, and Mongoose. He integrates REST APIs and WebSockets, builds authenticated flows and dashboards, and has experience with cloud hosting and deployment workflows.",
+    ka: "Frontend გამოცდილების გარდა, აკო ქმნის Full-stack ფუნქციონალს Node.js, Express, MongoDB და Mongoose-ით. მუშაობს REST API და WebSocket ინტეგრაციებზე, ავტორიზებულ პროცესებზე, დეშბორდებსა და Cloud ჰოსტინგზე.",
+  },
+  {
+    terms: ["mobile", "ios", "android", "app store", "google play", "მობილურ", "ანდროიდ", "აპლიკაცი"],
+    en: "Ako specialises in React Native and has delivered iOS and Android applications. His experience includes app architecture, reusable components, API handling, state management, Android Studio, Xcode, App Store, and Google Play release workflows.",
+    ka: "აკო სპეციალიზდება React Native-ში და შექმნილი აქვს iOS და Android აპლიკაციები. მისი გამოცდილება მოიცავს აპის არქიტექტურას, მრავალჯერად კომპონენტებს, API-ებთან მუშაობას, მდგომარეობის მართვას, Android Studio-ს, Xcode-სა და App Store/Google Play რელიზებს.",
+  },
+  {
+    terms: ["available", "availability", "hire", "job", "remote", "hybrid", "opportunity", "დასაქმ", "დისტანც", "ჰიბრიდ", "ვაკანს"],
+    en: "Ako is open to remote and hybrid opportunities. For a role or project discussion, you can contact him directly at akolekveishvili@gmail.com or +995 557 404 359.",
+    ka: "აკო ღიაა დისტანციური და ჰიბრიდული შესაძლებლობებისთვის. ვაკანსიის ან პროექტის შესახებ შეგიძლიათ დაუკავშირდეთ: akolekveishvili@gmail.com ან +995 557 404 359.",
+  },
+  {
+    terms: ["contact", "email", "phone", "linkedin", "reach", "კონტაქტ", "იმეილ", "ტელეფონ", "ლინკდინ"],
+    en: "You can contact Ako at akolekveishvili@gmail.com or +995 557 404 359. His LinkedIn is linked in the Contact section below.",
+    ka: "აკოსთან დაკავშირება შეგიძლიათ ელფოსტით: akolekveishvili@gmail.com ან ტელეფონით: +995 557 404 359. LinkedIn ბმული მოცემულია ქვემოთ, კონტაქტის სექციაში.",
+  },
+  {
+    terms: ["education", "university", "language", "english", "georgian", "education", "განათლებ", "უნივერსიტეტ", "ენა", "ინგლის"],
+    en: "Ako holds a Bachelor of Business & Technology from Ilia State University. He speaks Georgian natively, and English and Russian at B2 level.",
+    ka: "აკოს აქვს ილიას სახელმწიფო უნივერსიტეტის ბიზნესისა და ტექნოლოგიების ბაკალავრის ხარისხი. ქართული მისი მშობლიური ენაა; ინგლისურსა და რუსულს ფლობს B2 დონეზე.",
+  },
+];
 
-His work includes Gifta.ge, freelance full-stack development, Calendo, Altera, IdeoDigital, NLYC, and Mego.ge. He has experience in e-commerce, booking and scheduling, clinic software, dashboards, real-time interfaces, and iOS/Android apps. He is open to remote and hybrid opportunities. Contact: akolekveishvili@gmail.com, +995 557 404 359.`;
+function getResponse(question: string, messages: Message[], language: Language) {
+  const normalised = question.toLocaleLowerCase();
+  const isGeorgian = /[\u10A0-\u10FF]/.test(question) || language === "ka";
+  const greeting = /^(hi|hello|hey|გამარჯობა|გაგიმარჯოს)/.test(normalised.trim());
+  const matches = KNOWLEDGE
+    .map((topic) => ({ topic, score: topic.terms.reduce((total, term) => total + (normalised.includes(term) ? 1 : 0), 0) }))
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 2);
+
+  if (greeting && matches.length === 0) {
+    return isGeorgian
+      ? "გამარჯობა! მე ვარ აკოს პორტფოლიოს ასისტენტი. შეგიძლიათ მკითხოთ მისი გამოცდილების, ტექნოლოგიების, პროექტების, ხელმისაწვდომობის ან საკონტაქტო ინფორმაციის შესახებ."
+      : "Hello! I’m Ako’s portfolio assistant. Ask me about his experience, technical stack, projects, availability, or contact details.";
+  }
+
+  if (matches.length > 0) {
+    const answers = matches.map(({ topic }) => isGeorgian ? topic.ka : topic.en);
+    return answers.join("\n\n");
+  }
+
+  const hasConversation = messages.some((message) => message.role === "assistant");
+  return isGeorgian
+    ? hasConversation
+      ? "ამ კითხვაზე ზუსტი ინფორმაცია ჩემს მონაცემებში არ მაქვს და არ მინდა ვარაუდი გავაკეთო. შემიძლია უფრო კონკრეტულად გიპასუხოთ აკოს გამოცდილების, React/React Native სტეკის, პროექტების, დასაქმების ფორმატის ან კონტაქტის შესახებ."
+      : "ამ საკითხზე ზუსტი ინფორმაცია არ მაქვს, ამიტომ არ მინდა არაზუსტი პასუხი მოგცეთ. შემიძლია დაგეხმაროთ აკოს გამოცდილების, ტექნოლოგიების, პროექტების, ხელმისაწვდომობის ან კონტაქტის შესახებ."
+    : hasConversation
+      ? "I don’t have verified information for that, so I don’t want to guess. I can give more detail about Ako’s experience, React/React Native stack, projects, work preferences, or contact details."
+      : "I don’t have verified information for that, so I don’t want to guess. You can ask about Ako’s experience, technologies, projects, availability, or contact details.";
+}
 
 export default function ChatAssistant({ language }: { language: Language }) {
   const t = copy[language];
@@ -35,32 +107,11 @@ export default function ChatAssistant({ language }: { language: Language }) {
     setInput("");
     setLoading(true);
 
-    try {
-      const res = await fetch("https://chatbot-ypfo.onrender.com/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          messages: [
-            { role: "system", content: PERSONA },
-            ...messages.map((message) => ({ role: message.role, content: message.text })),
-            { role: "user", content: input },
-          ],
-        }),
-      });
-
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      const reply = data.choices?.[0]?.message?.content || "No response";
+    window.setTimeout(() => {
+      const reply = getResponse(input, messages, language);
       setMessages((prev) => [...prev, { role: "assistant", text: reply }]);
-    } catch (error) {
-      console.error(error);
-      setMessages((prev) => [...prev, {
-        role: "assistant",
-        text: language === "ka" ? "ასისტენტი დროებით მიუწვდომელია. გთხოვთ, სცადოთ მოგვიანებით ან დაუკავშირდეთ აკოს ელფოსტით." : "The assistant is temporarily unavailable. Please try again later or contact Ako by email.",
-      }]);
-    } finally {
       setLoading(false);
-    }
+    }, Math.min(900, 350 + input.length * 8));
   };
 
   return (
